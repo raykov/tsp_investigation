@@ -16,7 +16,7 @@ TSP can be modelled as an undirected weighted graph, such that cities are the gr
 
 ### Ruby
 
-`travelling_salesman.rb`
+ * `travelling_salesman.rb`
 
 ##### Run
 
@@ -31,7 +31,7 @@ ruby travelling_salesman.rb [amount_of_cities_to_test] [times_to_run]
 
 ### Go. First blood (aka. Bad Go)
 
-`bad_go/travelling_salesman.go`
+ * `bad_go/travelling_salesman.go`
 
 ##### Run
 
@@ -47,8 +47,8 @@ go run ./bad_go [path_to_data_file] [amount_of_cities_to_test] [times_to_run]
 
 ### Good Go
 
-`good_go/travelling_salesman.go` - runner
-`good_go/find-optimal-path.go` - algorithm
+ * `good_go/travelling_salesman.go` - runner
+ * `good_go/find-optimal-path.go` - algorithm
 
 ##### Run
 
@@ -64,8 +64,8 @@ go run ./good_go [path_to_data_file] [amount_of_cities_to_test] [times_to_run]
 
 ### Ugly Go
 
-`ugly_go/travelling_salesman.go` - runner
-`ugly_go/find-faster-optimal-path.go` - algorithm
+ * `ugly_go/travelling_salesman.go` - runner
+ * `ugly_go/find-faster-optimal-path.go` - algorithm
 
 ##### Run
 
