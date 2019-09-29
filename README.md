@@ -12,6 +12,8 @@ TSP can be modelled as an undirected weighted graph, such that cities are the gr
  * `tsp_burgers.csv`
     Contains test data for algorithm demonstration.
 
+---
+
 ### Ruby
 
 `travelling_salesman.rb`
@@ -24,6 +26,8 @@ ruby travelling_salesman.rb [amount_of_cities_to_test] [times_to_run]
 
  * `amount_of_cities_to_test` - integer from 3 to 20.
  * `times_to_run` - integer from 1 to any reasonable number (100_000, for example). How many times it will run code to get average execution time.
+
+---
 
 ### Go. First blood (aka. Bad Go)
 
