@@ -109,3 +109,23 @@ Office ► EastBurger ► Markthalleneun ► Windburger ► Angry Chicken ► Ca
 
 771.897783ms
 ```
+
+### Benchmarks
+
+You can find benchmark results for different data sets (from 3 cities up to 13. 14 only for Good Go implementation) inside [`/benchmarks`](./benchmarks) folder.
+
+#### Results for 3 cities
+
+![](./benchmarks/3_cities_minimum.png)
+
+#### Results for 6 cities
+
+![](./benchmarks/6_cities.png)
+
+#### Results for 11 cities
+
+![](./benchmarks/11_cities.png)
+
+#### Results for 13 cities
+
+![](./benchmarks/13_cities_maximum.png)
