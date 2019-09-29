@@ -1,0 +1,181 @@
+// Travelling Salesman Problem
+//
+// The travelling salesman problem (TSP) asks the following question:
+// "Given a list of cities and the distances between each pair of
+// cities, what is the shortest possible route that visits each
+// city and returns to the origin city?"
+//
+// TSP can be modelled as an undirected weighted graph, such that
+// cities are the graph's vertices, paths are the graph's edges,
+// and a path's distance is the edge's weight. It is a minimization
+// problem starting and finishing at a specified vertex after having
+// visited each other vertex exactly once. Often, the model is a
+// complete graph (i.e. each pair of vertices is connected by an
+// edge). If no path exists between two cities, adding an arbitrarily
+// long edge will complete the graph without affecting the optimal tour.
+
+package main
+
+import (
+	"fmt"
+	"github.com/raykov/tsp_investigation/utilities"
+	"math"
+	"os"
+	"strconv"
+	"strings"
+	"time"
+)
+
+var graph map[string]map[string]int
+var cities []string
+var weights [][]int
+
+func main() {
+	fileName := os.Args[1]
+
+	size, err := strconv.Atoi(os.Args[2])
+	if err != nil {
+		panic(err.Error())
+	}
+	if size == 0 { size = 3 }
+
+	runTimes, err := strconv.Atoi(os.Args[3])
+	if err != nil {
+		panic(err.Error())
+	}
+
+	runTimes = int(math.Max(float64(runTimes), 1))
+
+	cities, weights = utilities.ReadDataFromCSV(fileName, size)
+
+	for rowIndex, line := range weights {
+		for columnIndex, weight := range line {
+			if rowIndex != columnIndex {
+				addEdge(cities[rowIndex], cities[columnIndex], weight)
+			}
+		}
+	}
+	var minimalPath int
+	var route []string
+
+	start := time.Now()
+	for i := 0; i < runTimes; i ++ {
+		minimalPath, route = findOptimalPath(0)
+	}
+	t := time.Now()
+	elapsed := t.Sub(start)
+
+	elapsed = elapsed / time.Duration(runTimes)
+
+	fmt.Printf("minimalPath: %d \n", minimalPath)
+	fmt.Printf("%v\n", strings.Join(route, " ► "))
+
+	fmt.Printf("\n\n%v\n%v\n\n%+v\n", start, t, elapsed)
+}
+
+func findOptimalPath(startVertexIndex int) (minimalPath int, route []string) {
+	if startVertexIndex > len(cities) - 1 {
+		panic(fmt.Sprintf("startVertexIndex %v is out of cities count %v", startVertexIndex, len(cities)))
+	}
+
+	startVertex := cities[startVertexIndex]
+
+	allPaths := findAllPaths(
+		startVertex,
+		[][]string{},
+		make([]string, 0, 1000),
+	)
+
+	mPath := findMinimalPath(startVertex, allPaths)
+
+	return mPath.weight, mPath.path
+}
+
+func addEdge(u string, v string, weight int) {
+	if graph == nil {
+		graph = map[string]map[string]int{}
+	}
+	if graph[u] == nil {
+		graph[u] = map[string]int{}
+	}
+	graph[u][v] = weight
+}
+
+func findAllPaths(startVertex string, paths [][]string, path []string) [][]string {
+	currentPath := append([]string(nil), path...)
+	currentPath = append(currentPath, startVertex)
+
+	unvisitedNeighbors := difference(keys(graph[startVertex]), currentPath) //make([]string, len(graph[startVertex]))
+
+	if len(unvisitedNeighbors) == 0 {
+		paths = append(paths, currentPath)
+
+		return paths
+	}
+
+	for _, neighbor := range unvisitedNeighbors {
+		paths = findAllPaths(neighbor, paths, currentPath)
+	}
+
+	return paths
+}
+
+type minPath struct {
+	path   []string
+	weight int
+}
+
+func findMinimalPath(startVertex string, paths [][]string) minPath {
+	minPathWithLen := minPath{}
+	minPathWithLen.weight = math.MaxInt64
+
+	for _, path := range paths {
+		if len(difference([]string{startVertex}, keys(graph[path[len(path)-1]]))) == 0 {
+			currentLen := 0
+
+			for index, city := range path {
+				if len(path)-1 == index {
+					currentLen += graph[city][startVertex]
+				} else {
+					currentLen += graph[city][path[index+1]]
+				}
+			}
+
+			if currentLen < minPathWithLen.weight {
+				minPathWithLen.weight = currentLen
+				minPathWithLen.path = path
+			}
+		}
+	}
+
+	return minPathWithLen
+}
+
+// Returns Hash.keys for slice
+func keys(hash map[string]int) []string {
+	keys := make([]string, 0)
+	for key, _ := range hash {
+		keys = append(keys, key)
+	}
+
+	return keys
+}
+
+// Returns difference between elements in `a` that aren't in `b`.
+func difference(a, b []string) []string {
+	mb := make(map[string]struct{}, len(b))
+
+	for _, x := range b {
+		mb[x] = struct{}{}
+	}
+
+	var diff []string
+
+	for _, x := range a {
+		if _, found := mb[x]; !found {
+			diff = append(diff, x)
+		}
+	}
+
+	return diff
+}
