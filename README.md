@@ -76,3 +76,20 @@ go run ./ugly_go [path_to_data_file] [amount_of_cities_to_test] [times_to_run]
  * `path_to_data_file` - `./tsp_burgers.csv`
  * `amount_of_cities_to_test` - integer from 3 to 20.
  * `times_to_run` - integer from 1 to any reasonable number (100_000, for example). How many times it will run code to get average execution time.
+
+---
+
+### Awesome Go
+
+ * `awesome_go/travelling_salesman.go` - runner
+ * `awesome_go/find-goroutines-optimal-path.go` - algorithm
+
+##### Run
+
+```sh
+go run ./awesome_go [path_to_data_file] [amount_of_cities_to_test] [times_to_run]
+```
+
+ * `path_to_data_file` - `./tsp_burgers.csv`
+ * `amount_of_cities_to_test` - integer from 3 to 20.
+ * `times_to_run` - integer from 1 to any reasonable number (100_000, for example). How many times it will run code to get average execution time.
